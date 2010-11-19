@@ -5,6 +5,7 @@ require 'json'
 require 'nokogiri'
 require 'hpricot'
 require 'htmlentities'
+require 'activesupport'
 
 configure :development do
   require "sinatra/reloader"
@@ -15,38 +16,11 @@ set :haml, {:format => :html5, :escape_html => false}
 
 get '/' do
 	
-	# Start up the JSON string
-	json = "{"
-	
 	# Get the XML and process it into a nokogiri doc
 	xml_call = Curl::Easy.perform("http://daydreamtheme.tumblr.com/")
 	doc = Hpricot(xml_call.body_str)
 		
-	# Start a looping
-	doc.search("//data/").each do |element|
-		
-		# Only get elements, not text or comments
-		if (element.is_a?(Hpricot::Elem))
-			
-			# If it's not a block element
-			if (!/^block./.match(element.name))
-				
-				# Add it to the JSON, escaping the quotes
-				json += '"' + element.name + '": "' + element.inner_html.gsub(/["]/, '\\\\"') + '",'
-				
-			else
-				
-				# It's a block so we'll dive deeper
-				
-				
-			end
-			
-		end
-		
-	end
-	
-	# Remove the final comma Close the JSON string
-	json.chop! << "}"
+	json = Hash.from_xml(xml_call.body_str).to_json
 	
 	content_type :json
 	json

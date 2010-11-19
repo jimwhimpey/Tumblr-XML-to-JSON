@@ -1,0 +1,1 @@
+A tiny Sinatra app to convert a dummy XML output of Tumblr content into JSON for use by a theme developing tool using [Mustache](http://mustache.github.com/).

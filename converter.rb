@@ -20,8 +20,8 @@ get '/' do
 	
 	# Get the XML and process it into a nokogiri doc
 	xml_call = Curl::Easy.perform("http://daydreamtheme.tumblr.com/")
-	doc = Hpricot(xml_call.body_str)
-		
+	doc = Hpricot::XML(xml_call.body_str)
+	
 	# Start a looping
 	doc.search("//data/").each do |element|
 		
@@ -37,7 +37,22 @@ get '/' do
 			else
 				
 				# It's a block so we'll dive deeper
-				
+				# If it contains items
+				if (element.search("/item").length > 0)
+					# Has items
+					puts element.name + " has items"
+				else
+					
+					# No items, regular data
+					json += '"' + element.name + '": {'
+					element.search("/").each do |child|
+						if (child.is_a?(Hpricot::Elem))
+							json += '"' + child.name + '": "' + child.inner_html.gsub(/["]/, '\\\\"') + '",'
+						end
+					end
+					json.chop! << "},"
+					
+				end
 				
 			end
 			
@@ -47,6 +62,8 @@ get '/' do
 	
 	# Remove the final comma Close the JSON string
 	json.chop! << "}"
+	
+	puts json
 	
 	content_type :json
 	json

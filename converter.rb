@@ -2,9 +2,7 @@ require 'rubygems'
 require 'sinatra'
 require 'curb'
 require 'json'
-require 'nokogiri'
 require 'hpricot'
-require 'htmlentities'
 
 configure :development do
   require "sinatra/reloader"
@@ -13,26 +11,42 @@ end
 # Default is xhtml, do not want!
 set :haml, {:format => :html5, :escape_html => false}
 
+# By default present a little homepage
 get '/' do
 	
-	# Start up the JSON string
-	json = "{"
+	content_type :html
+	"<html><title>Test</title></html>"
+	
+end
+
+
+# Load up a particular URL
+get %r{/content/?([^\/]*)/?$} do
+	
+	# If it's empty use the default
+	if (params[:captures][0].empty?)
+		url = "http://daydreamtheme.tumblr.com/"
+	else 
+		url = "http://" + params[:captures][0]
+	end
 	
 	# Get the XML and process it into a nokogiri doc
-	xml_call = Curl::Easy.perform("http://daydreamtheme.tumblr.com/")
+	xml_call = Curl::Easy.perform(url)
 	doc = Hpricot::XML(xml_call.body_str)
 	
 	# Call the recursive convertXML function
 	json = convertXML(doc.search("//data"))
 	
-	puts json
-	
 	content_type :json
-	json
+	
+	# Crude error checking
+	if (json == "}")
+		{ :Error => "You're not using the proper Tumblr XML theme" }.to_json
+	else
+		json
+	end
 	
 end
-
-
 
 
 # Takes a given block of XML, loops through and converts it to JSON.

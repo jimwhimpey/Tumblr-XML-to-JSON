@@ -53,7 +53,7 @@ def convertXML(xml)
 			if (!/^block./.match(element.name))
 				
 				# Add it to the JSON, escaping the quotes
-				json += '"' + element.name + '": "' + element.inner_html.gsub(/["]/, '\\\\"') + '",'
+				json += '"' + element.name + '": "' + element.inner_html.gsub(/["]/, '\'').gsub(/[\\]/, '').strip + '",'
 				
 			else
 				
@@ -61,6 +61,18 @@ def convertXML(xml)
 				if (element.search("/item").length > 0)
 					
 					# Contains items, needs to be an array
+					json += '"' + element.name + '": ['
+					
+					# Loop through them and convert to JSON
+					element.search("/item").each do |item|
+						if (element.is_a?(Hpricot::Elem))
+							json += convertXML(Hpricot::XML(item.inner_html))
+							json += ","
+						end
+					end
+					
+					# Close it up
+					json.chop! << "],"
 					
 				else
 					

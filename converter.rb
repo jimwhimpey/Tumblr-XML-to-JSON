@@ -53,7 +53,7 @@ def convertXML(xml)
 			if (!/^block./.match(element.name))
 				
 				# Add it to the JSON, escaping the quotes
-				json += '"' + element.name + '": "' + element.inner_html.gsub(/["]/, '\'').gsub(/[\\]/, '').strip + '",'
+				json += '"' + element.name + '": "' + element.inner_html.gsub(/["]/, '\'').gsub(/[\\]/, '\\\\\\').strip + '",'
 				
 			else
 				

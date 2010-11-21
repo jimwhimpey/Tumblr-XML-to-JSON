@@ -15,7 +15,23 @@ set :haml, {:format => :html5, :escape_html => false}
 get '/' do
 	
 	content_type :html
-	"<html><title>Test</title></html>"
+	<<-eos
+		<html>
+			<title>Tumblr XML to JSON Converter</title>
+			<h1>Tumblr XML to JSON Converter</h1>
+			<p>By <a href="http://jimwhimpey.com">Jim Whimpey</a></p>
+			<p>This is a helper tool for <a href='http://makenosound.com/'>Max Wheeler's</a> idea to
+				use <a href="http://mustache.github.com/">Mustache</a> to make <a href="http://www.tumblr.com/docs/en/custom_themes">
+				Tumblr theme</a> development much easier.</p>
+			<p>It takes the output of a Tumblr blog filled with dummy content using an XML theme and converts it to
+				JSON that Mustache can use natively.</p>
+			<h2>Usage</h2>
+			<ul>
+				<li><a href="/content">http://tumblrxmltojson.heroku.com/content</a> for default dummy data</li>
+				<li><a href="/content">http://tumblrxmltojson.heroku.com/content/daydreamtheme.tumblr.com</a> for your own dummy data</li>
+			</ul>
+		</html>
+  eos
 	
 end
 

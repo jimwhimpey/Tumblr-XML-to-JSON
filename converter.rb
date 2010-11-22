@@ -28,7 +28,7 @@ get '/' do
 			<h2>Usage</h2>
 			<ul>
 				<li><a href="/content">http://tumblrxmltojson.heroku.com/content</a> for default dummy data</li>
-				<li><a href="/content">http://tumblrxmltojson.heroku.com/content/daydreamtheme.tumblr.com</a> for your own dummy data</li>
+				<li><a href="/content/daydreamtheme.tumblr.com">http://tumblrxmltojson.heroku.com/content/daydreamtheme.tumblr.com</a> for your own dummy data</li>
 			</ul>
 			<p>Code hosted on <a href="https://github.com/jimwhimpey/Tumblr-XML-to-JSON">github</a></p>
 		</html>

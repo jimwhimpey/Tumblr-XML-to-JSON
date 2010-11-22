@@ -52,7 +52,7 @@ get %r{/content/?([^\/]*)/?$} do
 	doc = Hpricot::XML(xml_call.body_str)
 	
 	# Call the recursive convertXML function
-	json = convertXML(doc.search("//data"))
+	json = "var rawTumblrData = " + convertXML(doc.search("//data")) + ";"
 	
 	content_type 'text/javascript', :charset => 'utf-8'
 	
@@ -72,7 +72,7 @@ end
 def convertXML(xml)
 	
 	# Start up the JSON string we'll eventually return
-	json = "var rawTumblrData = {"
+	json = "{"
 	
 	# Start the loop
 	xml.search("/").each do |element|
@@ -121,6 +121,6 @@ def convertXML(xml)
 	end
 	
 	# Remove the final comma Close the JSON string
-	return json.chop! << "};"
+	return json.chop! << "}"
 	
 end

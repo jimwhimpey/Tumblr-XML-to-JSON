@@ -52,9 +52,9 @@ get %r{/content/?([^\/]*)/?$} do
 	doc = Hpricot::XML(xml_call.body_str)
 	
 	# Call the recursive convertXML function
-	json = convertXML(doc.search("//data"))
+	json = "var rawTumblrData = " + convertXML(doc.search("//data")) + ";"
 	
-	content_type :json
+	content_type 'text/javascript', :charset => 'utf-8'
 	
 	# Crude error checking
 	if (json == "}")

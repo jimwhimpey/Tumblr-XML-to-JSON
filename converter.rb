@@ -72,7 +72,7 @@ end
 def convertXML(xml)
 	
 	# Start up the JSON string we'll eventually return
-	json = "{"
+	json = "var rawTumblrData = {"
 	
 	# Start the loop
 	xml.search("/").each do |element|
@@ -121,6 +121,6 @@ def convertXML(xml)
 	end
 	
 	# Remove the final comma Close the JSON string
-	return json.chop! << "}"
+	return json.chop! << "};"
 	
 end

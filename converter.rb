@@ -54,7 +54,7 @@ get %r{/content/?([^\/]*)/?$} do
 	# Call the recursive convertXML function
 	json = convertXML(doc.search("//data"))
 	
-	content_type :javascript
+	content_type 'text/javascript', :charset => 'utf-8'
 	
 	# Crude error checking
 	if (json == "}")

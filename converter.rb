@@ -52,9 +52,9 @@ get %r{/content/?([^\/]*)/?$} do
 	doc = Hpricot::XML(xml_call.body_str)
 	
 	# Call the recursive convertXML function
-	json = "var rawTumblrData = " + convertXML(doc.search("//data")) + ";"
+	json = convertXML(doc.search("//data"))
 	
-	content_type 'text/javascript', :charset => 'utf-8'
+	content_type :json
 	
 	# Crude error checking
 	if (json == "}")
@@ -84,7 +84,7 @@ def convertXML(xml)
 			if (!/^block./.match(element.name))
 				
 				# Add it to the JSON, escaping the quotes
-				json += '"' + element.name + '": "' + element.inner_html.gsub(/["]/, '\'').gsub(/[\\]/, '\\\\\\').strip + '",'
+				json += '"' + element.name + '": "' + element.inner_html.gsub(/["]/, '\'').gsub(/[\\]/, '\\\\\\').gsub(/<!\[CDATA\[/, '').gsub(/\]\]>/, '').strip + '",'
 				
 			else
 				

@@ -38,7 +38,7 @@ end
 
 
 # Load up a particular URL
-get %r{/content/?([^\/]*)/?$} do
+get %r{/content/?(.*)} do
 	
 	# If it's empty use the default
 	if (params[:captures][0].empty?)

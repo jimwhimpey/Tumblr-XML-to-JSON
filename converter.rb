@@ -47,14 +47,17 @@ get %r{/content/?(.*)} do
 		url = "http://" + params[:captures][0]
 	end
 	
+	# Pull out the callback function name
+	callback_name = request.query_string.split("=")[1]
+	
 	# Get the XML and process it into a nokogiri doc
 	xml_call = Curl::Easy.perform(url)
 	doc = Hpricot::XML(xml_call.body_str)
 	
 	# Call the recursive convertXML function
-	json = "var rawTumblrData = " + convertXML(doc.search("//data")) + ";"
+	json = callback_name + "(" + convertXML(doc.search("//data")) + ")"
 	
-	content_type 'text/javascript', :charset => 'utf-8'
+	content_type 'application/javascript', :charset => 'utf-8'
 	
 	# Crude error checking
 	if (json == "}")

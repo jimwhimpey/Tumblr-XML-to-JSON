@@ -48,7 +48,7 @@ get %r{/content/?(.*)} do
 	end
 	
 	# Pull out the callback function name
-	callback_name = request.query_string.split("=")[1]
+	callback_name = request.query_string.gsub!(/(callback=|callback=_jqjsp|=)/, "")
 	
 	# Get the XML and process it into a nokogiri doc
 	xml_call = Curl::Easy.perform(url)

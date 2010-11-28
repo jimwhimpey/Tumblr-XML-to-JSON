@@ -48,7 +48,12 @@ get %r{/content/?(.*)} do
 	end
 	
 	# Pull out the callback function name
-	callback_name = request.query_string.gsub!(/(callback=|callback=_jqjsp|=)/, "")
+	callback_name = request.query_string.gsub!(/(callback=|callback=_jqjsp|=|_jqjsp&)/, "")
+	
+	# Callback error checking
+	if (callback_name.nil?)
+		{ :Error => "Where's you're callback query string? This is jsonp." }.to_json
+	end
 	
 	# Get the XML and process it into a nokogiri doc
 	xml_call = Curl::Easy.perform(url)

@@ -61,7 +61,7 @@ get %r{/content/?(.*)} do
 	doc = Hpricot::XML(xml_call.body_str)
 	
 	# Call the recursive convertXML function
-	json = callback_name + "(" + convertXML(doc.search("//data")) + ")"
+	json = callback_name + "(" + convertXML(doc.search("//data")) + ");"
 	
 	content_type 'application/javascript', :charset => 'utf-8'
 	

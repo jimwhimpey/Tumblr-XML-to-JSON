@@ -48,6 +48,7 @@ get %r{/content/?(.*)} do
 	end
 	
 	# Pull out the callback function name
+	puts request.query_string
 	callback_name = request.query_string.gsub(/(callback=|callback=_jqjsp|=|_jqjsp&)/, "")
 	
 	# Callback error checking

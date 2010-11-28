@@ -49,7 +49,8 @@ get %r{/content/?(.*)} do
 	
 	# Pull out the callback function name
 	puts request.query_string
-	callback_name = request.query_string.gsub(/(callback=|callback=_jqjsp|=|_jqjsp&)/, "")
+	callback_name = request.query_string.match(/callback=(.+)(&)/)[1]
+	puts callback_name
 	
 	# Callback error checking
 	if (callback_name.nil?)
@@ -61,7 +62,7 @@ get %r{/content/?(.*)} do
 	doc = Hpricot::XML(xml_call.body_str)
 	
 	# Call the recursive convertXML function
-	json = "_jqjsp(" + convertXML(doc.search("//data")) + ");"
+	json = callback_name + "(" + convertXML(doc.search("//data")) + ");"
 	
 	content_type 'application/javascript'
 	

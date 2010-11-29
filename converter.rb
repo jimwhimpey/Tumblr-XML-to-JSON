@@ -49,26 +49,27 @@ get %r{/content/?(.*)} do
 	end
 	
 	# Pull out the callback function name
-	puts request.query_string
-	callback_name = request.query_string.match(/callback=(.+)(&)/)[1]
-	puts callback_name
-	
-	# Callback error checking
-	if (callback_name.nil?)
-		return { :Error => "Where's you're callback query string? This is jsonp." }.to_json
+	if request.query_string.match(/callback=([^&]+)/)
+		callback_name = request.query_string.match(/callback=([^&]+)/)[1]
 	end
 	
 	# Get the XML and process it into a nokogiri doc
 	xml_call = Curl::Easy.perform(url)
 	doc = Hpricot::XML(xml_call.body_str)
 	
-	# Call the recursive convertXML function
-	json = callback_name + "(" + convertXML(doc.search("//data")) + ");"
+	# If it has a callback serve jsonp, if not serve regular json
+	if callback_name.nil?
+		# Call the recursive convertXML function
+		json = convertXML(doc.search("//data"))
+	else
+		# Call the recursive convertXML function
+		json = callback_name + "(" + convertXML(doc.search("//data")) + ");"
+	end
 	
 	content_type 'application/javascript'
 	
 	# Crude error checking
-	if (json == "}")
+	if json == "}"
 		{ :Error => "You're not using the proper Tumblr XML theme" }.to_json
 	else
 		json

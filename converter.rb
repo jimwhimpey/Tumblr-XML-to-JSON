@@ -43,7 +43,7 @@ get %r{/content/?(.*)} do
 	
 	# If it's empty use the default
 	if (params[:captures][0].empty?)
-		url = "http://daydreamtheme.tumblr.com/"
+		url = "http://tumblrthemr.tumblr.com/"
 	else 
 		url = "http://" + params[:captures][0]
 	end

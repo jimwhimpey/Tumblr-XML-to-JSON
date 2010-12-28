@@ -54,8 +54,10 @@ get %r{/content/?(.*)} do
 	end
 	
 	# Get the XML and process it into a nokogiri doc
-	xml_call = Curl::Easy.perform(url)
-	doc = Hpricot::XML(xml_call.body_str)
+	curl = Curl::Easy.new(url)
+	curl.follow_location = true
+	curl.http_get
+	doc = Hpricot::XML(curl.body_str)
 	
 	# If it has a callback serve jsonp, if not serve regular json
 	if callback_name.nil?

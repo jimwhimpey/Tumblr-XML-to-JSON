@@ -101,7 +101,7 @@ def convertXML(xml)
 				element.name == "FakeBody" ? element_name = "Body" : element_name = element.name
 				
 				# Add it to the JSON, escaping the quotes
-				json += '"' + element_name.gsub(/themr/, '') + '": "' + element.inner_html.gsub(/["]/, '\'').gsub(/[\\]/, '\\\\\\').gsub(/<!\[CDATA\[/, '').gsub(/\]\]>/, '').gsub(/\n/, '').strip + '",'
+				json += '"' + element_name.gsub(/themr/, '') + '": "' + element.inner_html.gsub(/[\\]/, '\\\\\\').gsub(/["]/, '\"').gsub(/<!\[CDATA\[/, '').gsub(/\]\]>/, '').gsub(/\n/, '').strip + '",'
 				
 			else
 				

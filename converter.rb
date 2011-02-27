@@ -73,6 +73,8 @@ get %r{/content/?(.*)} do
 	# Crude error checking
 	if json == "}"
 		{ :Error => "You're not using the proper Tumblr XML theme" }.to_json
+	elsif !callback_name.nil? && json == callback_name + "(});"
+		callback_name + "({'Error': 'You\'re not using the proper Tumblr XML theme'});" 
 	else
 		json
 	end

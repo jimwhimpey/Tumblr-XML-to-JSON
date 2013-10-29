@@ -69,6 +69,7 @@ get %r{/content/?(.*)} do
 	end
 	
 	content_type 'application/javascript'
+	response.headers['Access-Control-Allow-Origin'] = '*'
 	
 	# Crude error checking
 	if json == "}"
